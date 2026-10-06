@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HanZiPath — Your Journey to Mandarin</title>
+<style>
+:root{--bg:#faf6ee;--card:#fff;--ink:#16213a;--mut:#6b7285;--red:#c8312b;--gold:#c9a24a;--ln:#eadfca}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+#sb{position:fixed;left:0;top:0;bottom:0;width:210px;padding:20px 14px;border-right:1px solid var(--ln);background:#fffdf8}
+#app{margin-left:210px;padding:28px;max-width:960px}#bn{display:none}
+.logo{font-weight:800;font-size:20px;margin-bottom:2px}.logo b{color:var(--red)}.tag{font-size:12px;color:var(--mut);margin-bottom:20px}
+.nv{display:block;padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-size:14px;margin-bottom:2px}.nv.on{background:var(--red);color:#fff}
+.card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 2px 10px #16213a12;margin-bottom:14px;animation:in .25s}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+h1{font-size:30px;margin:0 0 8px}h2{margin:18px 0 10px;font-size:20px}.mut{color:var(--mut);font-size:14px}
+.btn{border:0;border-radius:10px;padding:10px 16px;font-weight:600;cursor:pointer;background:var(--red);color:#fff;font-size:14px;margin:3px 3px 3px 0}
+.btn.s{background:#fff;color:var(--ink);border:1px solid var(--ln)}.btn.g{background:var(--gold)}
+.hero{background:linear-gradient(135deg,#fff,#f6e9c8);padding:30px}.hero h1{font-size:34px}
+.hz{font-size:44px;font-weight:600;line-height:1.1}.big{font-size:80px;text-align:center}
+.bar{height:8px;background:#efe6d3;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--red);transition:width .4s}
+.tab{display:inline-block;padding:7px 13px;border-radius:20px;border:1px solid var(--ln);background:#fff;cursor:pointer;margin:0 4px 6px 0;font-size:13px}.tab.on{background:var(--ink);color:#fff}
+input,select{padding:10px;border-radius:10px;border:1px solid var(--ln);font-size:14px;background:#fff;margin:0 6px 8px 0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.opt{display:block;width:100%;text-align:left;padding:12px;margin:6px 0;border-radius:10px;border:1px solid var(--ln);background:#fff;font-size:18px;cursor:pointer}
+.ok{background:#dff3e3!important}.no{background:#fbdcda!important}
+.flip{min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;text-align:center}
+canvas{width:100%;max-width:320px;height:320px;border:2px dashed var(--gold);border-radius:14px;background:#fff;touch-action:none;display:block;margin:auto}
+.stat{font-size:28px;font-weight:800;color:var(--red)}
+.pill{font-size:12px;background:#f3e6c3;border-radius:20px;padding:2px 9px}
+@media(max-width:800px){#sb{display:none}#app{margin:0;padding:16px 14px 90px}.hero h1{font-size:26px}
+#bn{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fffdf8;border-top:1px solid var(--ln);justify-content:space-around;padding:6px 0 10px}
+#bn a{font-size:11px;text-align:center;text-decoration:none;color:var(--mut);padding:4px 6px}#bn a.on{color:var(--red);font-weight:700}}
+</style></head><body><aside id="sb"></aside><main id="app"></main><nav id="bn"></nav>
+<script>
+// ---------- DATA (mudah dipindah ke backend: Level > Lesson > Vocabulary) ----------
+const mk=(t,w,ex,g)=>({t,w:w.split(';').map(x=>x.split('|')),ex,g});
+const D={
+'Beginner':[
+mk('Greetings',"你好|nǐ hǎo|halo;谢谢|xièxie|terima kasih;再见|zàijiàn|sampai jumpa;对不起|duìbuqǐ|maaf;没关系|méi guānxi|tidak apa-apa",["你好，我叫小明。","Nǐ hǎo, wǒ jiào Xiǎomíng.","Halo, nama saya Xiaoming."],["吗 (ma)","Partikel pertanyaan ya/tidak. Rumus: Kalimat + 吗？ Contoh: 你是学生吗？ (Nǐ shì xuésheng ma?) = Apakah kamu siswa?"]),
+mk('Pronouns',"我|wǒ|saya;你|nǐ|kamu;他|tā|dia (laki-laki);是|shì|adalah;不|bù|tidak",["我是学生。","Wǒ shì xuésheng.","Saya adalah siswa."],["是 (shì)","Kata kerja 'adalah'. Rumus: A + 是 + B. Negatif: A + 不是 + B."]),
+mk('Polite Words',"请|qǐng|silakan;好|hǎo|baik;早上好|zǎoshang hǎo|selamat pagi;晚安|wǎn'ān|selamat malam;欢迎|huānyíng|selamat datang",["请坐。","Qǐng zuò.","Silakan duduk."],["请 (qǐng)","Diletakkan sebelum kata kerja untuk meminta dengan sopan: 请 + kata kerja."])],
+'HSK 1':[
+mk('People & Family',"老师|lǎoshī|guru;学生|xuésheng|siswa;朋友|péngyou|teman;爸爸|bàba|ayah;妈妈|māma|ibu",["我的妈妈是老师。","Wǒ de māma shì lǎoshī.","Ibu saya adalah guru."],["的 (de)","Penanda kepemilikan. Rumus: Pemilik + 的 + Benda."]),
+mk('Food & Drinks',"吃|chī|makan;喝|hē|minum;水|shuǐ|air;米饭|mǐfàn|nasi;学习|xuéxí|belajar",["我喝水。","Wǒ hē shuǐ.","Saya minum air."],["Urutan kalimat","Pola dasar: Subjek + Kata Kerja + Objek. Contoh: 我 吃 米饭。"]),
+mk('Numbers & Time',"一|yī|satu;二|èr|dua;三|sān|tiga;今天|jīntiān|hari ini;家|jiā|rumah",["今天我在家。","Jīntiān wǒ zài jiā.","Hari ini saya di rumah."],["在 (zài)","Menunjukkan lokasi: Subjek + 在 + Tempat."])],
+'HSK 2':[
+mk('Daily Life',"问题|wèntí|pertanyaan/masalah;觉得|juéde|merasa;已经|yǐjīng|sudah;非常|fēicháng|sangat;经常|jīngcháng|sering",["我已经吃饭了。","Wǒ yǐjīng chī fàn le.","Saya sudah makan."],["了 (le)","Menandakan tindakan selesai: Kata kerja + 了."]),
+mk('Shopping',"手机|shǒujī|ponsel;便宜|piányi|murah;贵|guì|mahal;两|liǎng|dua (untuk benda);药|yào|obat",["这个手机很便宜。","Zhège shǒujī hěn piányi.","Ponsel ini sangat murah."],["很 (hěn)","Biasanya dipakai sebelum kata sifat: 很 + kata sifat."]),
+mk('Work & Study',"工作|gōngzuò|bekerja;帮助|bāngzhù|membantu;考试|kǎoshì|ujian;回答|huídá|menjawab;旅游|lǚyóu|berwisata",["我明天有考试。","Wǒ míngtiān yǒu kǎoshì.","Besok saya ada ujian."],["有 (yǒu)","Artinya 'punya/ada'. Negatif: 没有."])],
+'HSK 3':[],'HSK 4':[],'HSK 5':[],'HSK 6':[]};
+const LV=Object.keys(D),W=[];
+LV.forEach(l=>D[l].forEach((ls,li)=>ls.w.forEach(w=>{const o={id:W.length,h:w[0],p:w[1],m:w[2],lv:l,c:ls.t};W.push(o);w.id=o.id})));
+const STROKES={'你':'1. 丿 (撇) 2. 丨 (竖) 3. 丿 (撇) 4. 𠃌 (横折钩) 5. 丨 (竖) 6. 丿 (撇) 7. 丶 (点)','我':'1. 丿 2. 一 3. 亅 4. 𠄌 (提) 5. 乀 (斜钩) 6. 丿 7. 丶','好':'1. 𡿨 (撇点) 2. 丿 3. 一 4. 𠃋 (横撇) 5. 亅 (竖钩) 6. 一'};
+const NAV=[['home','Home','Beranda'],['learn','Learn','Belajar'],['practice','Practice','Latihan'],['vocab','Vocabulary','Kosakata'],['hsk','HSK','HSK'],['progress','Progress','Kemajuan'],['profile','Profile','Profil']];
+// ---------- STATE ----------
+const td=()=>new Date().toISOString().slice(0,10),yd=()=>new Date(Date.now()-864e5).toISOString().slice(0,10);
+let S=JSON.parse(localStorage.hzp||'null')||{name:'Pelajar',goal:'Pass HSK 3',daily:15,weekly:5,xp:0,streak:0,last:'',done:{},fav:[],learned:{},tasks:{},act:{},mins:0,scores:[]};
+const save=()=>localStorage.hzp=JSON.stringify(S);
+function xp(n,task){S.xp+=n;if(S.last!==td()){S.streak=S.last===yd()?S.streak+1:1;S.last=td()}
+ S.act[td()]=(S.act[td()]||0)+n;S.mins+=1;if(task){(S.tasks[td()]=S.tasks[td()]||{})[task]=1}save();toast('+'+n+' XP')}
+function toast(t){const e=document.createElement('div');e.textContent=t;e.style.cssText='position:fixed;top:16px;right:16px;background:var(--gold);color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;z-index:9';document.body.append(e);setTimeout(()=>e.remove(),1400)}
+const sp=i=>{const u=new SpeechSynthesisUtterance(typeof i=='number'?W[i].h:i);u.lang='zh-CN';u.rate=.8;speechSynthesis.cancel();speechSynthesis.speak(u)};
+const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const shuf=a=>[...a].sort(()=>Math.random()-.5);
+const lessons=()=>LV.flatMap(l=>D[l].map((x,i)=>l+'|'+i));
+const pct=l=>{const n=D[l].length;return n?Math.round(D[l].filter((_,i)=>S.done[l+'|'+i]).length/n*100):0};
+const overall=()=>Math.round(lessons().filter(k=>S.done[k]).length/lessons().length*100);
+// ---------- UI STATE ----------
+let lv='HSK 1',pt='flash',fl={i:0,flip:0,deck:shuf(W),k:0},qz=null,vq='',vl='',vf=0,tm=null;
+const nav=p=>NAV.map(n=>`<a class="nv ${p==n[0]?'on':''}" href="#/${n[0]}">${n[1]} · ${n[2]}</a>`).join('');
+const bar=v=>`<div class="bar"><i style="width:${v}%"></i></div>`;
+const wc=w=>`<div class="card"><div class="row"><div><div class="hz">${w.h}</div><div style="color:var(--red)">${w.p}</div><div>${w.m}</div><div class="mut"><span class="pill">${w.lv}</span> ${w.c}</div></div>
+<div><button class="btn s" onclick="sp(${w.id})">🔊</button><button class="btn s" onclick="fav(${w.id})">${S.fav.includes(w.id)?'⭐':'☆'}</button></div></div></div>`;
+function fav(i){S.fav.includes(i)?S.fav=S.fav.filter(x=>x!=i):S.fav.push(i);save();render()}
+// ---------- PAGES ----------
+const P={
+home(){const t=S.tasks[td()]||{},n=Object.keys(t).length;
+return `<div class="card hero"><h1>Learn Mandarin. Build Confidence. Reach HSK.</h1><p class="mut">Belajar bahasa Mandarin step by step dari Beginner hingga HSK dengan pelajaran interaktif, kosakata, listening, writing, dan latihan.</p>
+<a href="#/learn"><button class="btn">Start Learning</button></a><a href="#/hsk"><button class="btn s">Explore HSK</button></a><div class="hz" style="margin-top:14px;color:var(--red)">汉字 <span style="font-size:22px;color:var(--gold)">Hànzì · 💬 · 📚</span></div></div>
+<div class="card"><div class="row"><h2 style="margin:0">Today's Learning · Belajar Hari Ini</h2><b>${n} / 4</b></div>
+<p>${t.words?'✓':'○'} Pelajari 10 kata baru<br>${t.lesson?'✓':'○'} Selesaikan 1 lesson<br>${t.listen?'✓':'○'} Latihan listening<br>${t.flash?'✓':'○'} Ulas flashcard</p>${bar(n*25)}<a href="#/learn"><button class="btn" style="margin-top:10px">Continue Today's Lesson</button></a></div>
+<h2>Choose Your Level · Pilih Level</h2><div class="grid">${LV.map(l=>`<div class="card"><b>${l}</b> <span class="pill">${D[l].length} lesson</span><p class="mut">${D[l].length?'Materi aktif — mulai sekarang':'Segera hadir'}</p>${bar(pct(l))}<button class="btn" style="margin-top:10px" ${D[l].length?'':'disabled'} onclick="lv='${l}';location.hash='#/learn'">${pct(l)?'Continue':'Start'}</button></div>`).join('')}</div>`},
+learn(){return `<h1>Learn · Belajar</h1>${LV.map(l=>`<span class="tab ${l==lv?'on':''}" onclick="lv='${l}';render()">${l}</span>`).join('')}
+${D[lv].length?D[lv].map((x,i)=>{const k=lv+'|'+i,st=S.done[k]?'✓ Completed':'○ Not Started';return `<div class="card" style="cursor:pointer" onclick="location.hash='#/lesson/${i}'"><div class="row"><div><b>Lesson ${i+1} — ${x.t}</b><div class="mut">${x.w.length} kosakata · contoh kalimat · grammar · latihan</div></div><span class="pill">${st}</span></div></div>`}).join(''):'<div class="card mut">Materi level ini segera hadir. Silakan mulai dari Beginner, HSK 1, atau HSK 2.</div>'}`},
+lesson(i){const x=D[lv][i],k=lv+'|'+i;if(!x)return P.learn();
+return `<a href="#/learn" class="mut">← Kembali</a><h1>Lesson ${i+1} — ${x.t}</h1><h2>Vocabulary</h2>${x.w.map(w=>wc(W[w.id])).join('')}
+<h2>Example Sentences</h2><div class="card"><div class="hz" style="font-size:30px">${x.ex[0]}</div><div style="color:var(--red)">${x.ex[1]}</div><div>${x.ex[2]}</div><button class="btn s" onclick="sp('${x.ex[0]}')">🔊 Listen</button></div>
+<h2>Grammar</h2><div class="card"><b>${x.g[0]}</b><p>${x.g[1]}</p></div>
+<button class="btn" onclick="finish('${k}',${i})">${S.done[k]?'✓ Sudah selesai':'Tandai Selesai (+10 XP)'}</button><a href="#/practice"><button class="btn s">Practice</button></a>`},
+practice(){return `<h1>Practice · Latihan</h1>${[['flash','Flashcards'],['listen','Listening'],['write','Writing']].map(t=>`<span class="tab ${pt==t[0]?'on':''}" onclick="pt='${t[0]}';qz=null;render()">${t[1]}</span>`).join('')}${pt=='flash'?flash():pt=='listen'?listen():write()}`},
+vocab(){let r=W.filter(w=>(!vl||w.lv==vl)&&(!vf||S.fav.includes(w.id)));if(vq){const q=norm(vq);r=r.filter(w=>norm(w.p+w.m+w.c).includes(q)||w.h.includes(vq))}
+return `<h1>${vf?'My Vocabulary · Kosakata Saya':'Vocabulary · Kosakata'}</h1><input id="q" value="${vq}" placeholder="Search Chinese vocabulary..." oninput="vq=this.value;render(1)"><select onchange="vl=this.value;render()"><option value="">Semua Level</option>${LV.filter(l=>D[l].length).map(l=>`<option ${vl==l?'selected':''}>${l}</option>`).join('')}</select><span class="tab ${vf?'on':''}" onclick="vf=!vf;render()">⭐ Favorit</span>
+<div class="mut" style="margin-bottom:8px">${r.length} kata</div>${r.map(wc).join('')||'<div class="card mut">Tidak ditemukan.</div>'}`},
+hsk(){return `<h1>HSK</h1><div class="grid">${LV.slice(1).map(l=>{const n=D[l].reduce((a,x)=>a+x.w.length,0);return `<div class="card"><b>${l}</b><p class="mut">Vocabulary: ${n||'—'} kata<br>Lessons: ${D[l].length}<br>Progress: ${pct(l)}%</p>${bar(pct(l))}<button class="btn" style="margin-top:10px" ${n?'':'disabled'} onclick="startQ('test','${l}')">Start ${l}</button></div>`}).join('')}</div>`},
+progress(){const days=[...Array(7)].map((_,i)=>{const d=new Date(Date.now()-(6-i)*864e5);return [d.toLocaleDateString('en',{weekday:'short'}),S.act[d.toISOString().slice(0,10)]||0]}),mx=Math.max(20,...days.map(d=>d[1])),lc=lessons().filter(k=>S.done[k]).length,lw=Object.keys(S.learned).length;
+const ach=[['🏆 First Lesson',lc>=1],['🔥 7 Day Streak',S.streak>=7],['📚 10 Kata',lw>=10],['🎯 HSK 1 Beginner',pct('HSK 1')==100]];
+return `<h1>Progress · Kemajuan</h1><div class="grid">${[['Overall',overall()+'%'],['XP',S.xp],['Streak','🔥 '+S.streak+' hari'],['Kata',lw],['Lesson',lc],['Skor Latihan',(S.scores.length?Math.round(S.scores.reduce((a,b)=>a+b,0)/S.scores.length):0)+'%']].map(s=>`<div class="card"><div class="mut">${s[0]}</div><div class="stat">${s[1]}</div></div>`).join('')}</div>
+<h2>Weekly Learning Activity</h2><div class="card">${days.map(d=>`<div class="row" style="margin:6px 0"><span style="width:40px">${d[0]}</span><div style="flex:1">${bar(d[1]/mx*100)}</div><span class="mut">${d[1]} XP</span></div>`).join('')}</div>
+<h2>Achievements</h2><div class="grid">${ach.map(a=>`<div class="card" style="opacity:${a[1]?1:.4}">${a[0]}<div class="mut">${a[1]?'Terbuka!':'Terkunci'}</div></div>`).join('')}</div>`},
+profile(){return `<h1>Profile · Profil</h1><div class="card"><label class="mut">Nama</label><br><input value="${S.name}" onchange="S.name=this.value;save()"><br><label class="mut">Learning Goal</label><br><input value="${S.goal}" onchange="S.goal=this.value;save()"><br>
+<label class="mut">Daily Goal (menit)</label> <input type="number" style="width:80px" value="${S.daily}" onchange="S.daily=+this.value;save()"> <label class="mut">Weekly Goal (lesson)</label> <input type="number" style="width:80px" value="${S.weekly}" onchange="S.weekly=+this.value;save()"></div>
+<div class="card">Level: <b>${LV.find(l=>D[l].length&&pct(l)<100)||'HSK 2'}</b><br>Streak: 🔥 ${S.streak} hari<br>Total belajar: ${S.mins} menit<br>Kosakata dipelajari: ${Object.keys(S.learned).length}<br>XP: ${S.xp}</div>
+<button class="btn s" onclick="if(confirm('Reset semua data?')){localStorage.removeItem('hzp');location.reload()}">Reset Data</button>`},
+quiz(){return qz?qzHTML():P.practice()}};
+// ---------- ACTIONS & FEATURES ----------
+function finish(k,i){if(S.done[k])return;S.done[k]=1;D[lv][i].w.forEach(w=>S.learned[w.id]=1);xp(10,'lesson');xp(5,'words');render()}
+function flash(){const w=fl.deck[fl.i%fl.deck.length];return `<div class="card flip" onclick="fl.flip=!fl.flip;render()">${fl.flip?`<div style="color:var(--red);font-size:24px">${w.p}</div><div style="font-size:20px">${w.m}</div>`:`<div class="big">${w.h}</div><div class="mut">ketuk untuk membalik</div>`}</div>
+<div class="mut" style="text-align:center">${fl.i%fl.deck.length+1} / ${fl.deck.length} cards · Tahu: ${fl.k}</div><div style="text-align:center;margin-top:8px">
+<button class="btn s" onclick="fn(-1)">← Prev</button><button class="btn s" onclick="sp(${w.id})">🔊</button><button class="btn s" onclick="fl.deck=shuf(W);fl.i=0;fl.flip=0;render()">Shuffle</button><button class="btn s" onclick="fn(1)">Next →</button><br>
+<button class="btn" onclick="fl.k++;xp(1,'flash');fn(1)">Know ✓</button><button class="btn g" onclick="fn(1)">Don't Know ✗</button></div>`}
+function fn(d){fl.i=(fl.i+d+fl.deck.length)%fl.deck.length;fl.flip=0;render()}
+function listen(){return `<div class="card"><p>Dengarkan audio, lalu pilih yang kamu dengar.</p><button class="btn" onclick="startQ('listen')">Mulai Listening (10 soal)</button></div>`}
+function startQ(mode,l){const pool=mode=='test'?W.filter(w=>w.lv==l):W;qz={mode,l,i:0,s:0,wr:[],c:null,t:shuf(pool).slice(0,10).map(t=>({t,o:shuf([t,...shuf(pool.filter(w=>w!=t)).slice(0,3)])})),sec:mode=='test'?600:0};
+ clearInterval(tm);if(mode=='test')tm=setInterval(()=>{if(!qz||qz.i>=qz.t.length)return clearInterval(tm);qz.sec--;const e=document.getElementById('tm');if(e)e.textContent=Math.floor(qz.sec/60)+':'+String(qz.sec%60).padStart(2,'0')},1000);
+ location.hash='#/quiz';render();if(mode=='listen')setTimeout(()=>sp(qz.t[0].t.id),300)}
+function qzHTML(){const q=qz;if(q.i>=q.t.length){const p=Math.round(q.s/q.t.length*100);return `<div class="card"><h1>RESULT</h1><div class="stat">${p}%</div><p>Correct: ${q.s} · Incorrect: ${q.t.length-q.s}<br>Weak Areas: ${q.wr.length?[...new Set(q.wr.map(w=>w.c))].join(', '):'—'}</p>
+${q.wr.length?`<h2>Review Mistakes</h2>${q.wr.map(w=>`<div>${w.h} ${w.p} — ${w.m}</div>`).join('')}`:''}<button class="btn" onclick="startQ('${q.mode}','${q.l}')">Try Again</button><a href="#/practice"><button class="btn s">Selesai</button></a></div>`}
+const c=q.t[q.i],L=q.mode=='listen';
+return `<div class="card"><div class="row"><b>Question ${q.i+1} of ${q.t.length}</b>${q.mode=='test'?'<b id="tm">'+Math.floor(q.sec/60)+':'+String(q.sec%60).padStart(2,'0')+'</b>':''}<span>Score: ${q.s} / ${q.t.length}</span></div>${bar(q.i/q.t.length*100)}
+${L?`<p>你听到了什么？</p><button class="btn" onclick="sp(${c.t.id})">🔊 Play Audio</button>`:`<div class="big">${c.t.h}</div><p style="text-align:center" class="mut">Apa artinya?</p>`}
+${c.o.map((o,i)=>`<button class="opt ${q.c!=null?(o==c.t?'ok':q.c==i?'no':''):''}" onclick="ans(${i})">${'ABCD'[i]}. ${L?o.h:o.m}</button>`).join('')}
+${q.c!=null?`<b>${c.o[q.c]==c.t?'Correct!':'Try Again.'}</b><br><button class="btn" onclick="nq()">Next →</button>`:''}</div>`}
+function ans(i){if(qz.c!=null)return;const c=qz.t[qz.i];qz.c=i;if(c.o[i]==c.t)qz.s++;else qz.wr.push(c.t);render()}
+function nq(){qz.i++;qz.c=null;if(qz.i>=qz.t.length){S.scores.push(Math.round(qz.s/qz.t.length*100));xp(qz.mode=='listen'?15:15,qz.mode=='listen'?'listen':null)}render();if(qz.mode=='listen'&&qz.i<qz.t.length)setTimeout(()=>sp(qz.t[qz.i].t.id),300)}
+let wi=0;const WC=['你','我','好','学','水','吃'];
+function write(){const c=WC[wi%WC.length];return `<div class="card"><div class="row"><div>Tulis karakter: <span class="hz" style="color:var(--red)">${c}</span></div><button class="btn s" onclick="wi++;render()">Karakter lain</button></div><br><canvas id="cv" width="320" height="320"></canvas>
+<div style="text-align:center;margin-top:10px"><button class="btn s" onclick="clr()">Clear</button><button class="btn" onclick="sub()">Submit</button><button class="btn g" onclick="document.getElementById('ans').style.display='block'">Show Answer</button></div>
+<div id="ans" style="display:none;text-align:center"><div class="big">${c}</div></div><h2>Stroke Order</h2><p>${STROKES[c]||'Urutan goresan: ikuti aturan atas→bawah, kiri→kanan, horizontal sebelum vertikal.'}</p><div id="fb"></div></div>`}
+function initCv(){const cv=document.getElementById('cv');if(!cv)return;const x=cv.getContext('2d');x.lineWidth=8;x.lineCap='round';x.strokeStyle='#16213a';let d=0;window.ink=0;
+ const pos=e=>{const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*320/r.width,(e.clientY-r.top)*320/r.height]};
+ cv.onpointerdown=e=>{d=1;x.beginPath();x.moveTo(...pos(e))};cv.onpointermove=e=>{if(d){x.lineTo(...pos(e));x.stroke();window.ink++}};cv.onpointerup=cv.onpointerleave=()=>d=0}
+function clr(){const cv=document.getElementById('cv');cv.getContext('2d').clearRect(0,0,320,320);window.ink=0}
+function sub(){const f=document.getElementById('fb');if(window.ink<15){f.innerHTML='<b>Coba tulis lebih lengkap.</b>';return}f.innerHTML='<b>Bagus! Bandingkan tulisanmu dengan jawaban (Show Answer).</b>';xp(5,null)}
+// ---------- ROUTER ----------
+function render(keep){const r=location.hash.slice(2).split('/'),p=r[0]||'home',a=document.getElementById('app');
+ document.getElementById('sb').innerHTML=`<div class="logo">Han<b>Zi</b>Path</div><div class="tag">Your Journey to Mandarin.</div>${nav(p)}<div class="mut" style="margin-top:20px">⚡ ${S.xp} XP · 🔥 ${S.streak}</div>`;
+ const m=['home','learn','practice','vocab','profile'],ml={home:'Beranda',learn:'Belajar',practice:'Latihan',vocab:'Kosakata',profile:'Profil'};
+ document.getElementById('bn').innerHTML=m.map(k=>`<a class="${p==k?'on':''}" href="#/${k}">${ml[k]}</a>`).join('');
+ a.innerHTML=(P[p]||P.home)(+r[1]);if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(99,99)}}else if(!keep&&!arguments.length)scrollTo(0,0);
+ if(p=='practice')initCv()}
+onhashchange=()=>render();render();
+</script></body></html>
