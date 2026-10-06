@@ -1,6 +1,7 @@
 <!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HanZiPath — Your Journey to Mandarin</title>
 <style>
-:root{--bg:#faf6ee;--card:#fff;--ink:#16213a;--mut:#6b7285;--red:#c8312b;--gold:#c9a24a;--ln:#eadfca}
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;600;700&display=swap');
+:root{--bg:#f3f7f3;--card:#fff;--ink:#1c302b;--mut:#6c7c74;--red:#bd4437;--gold:#bd9148;--ln:#dce7df;--jade:#28765e;--jade-soft:#e5f1e9;--shadow:0 8px 24px rgba(29,56,44,.07)}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
 #sb{position:fixed;left:0;top:0;bottom:0;width:210px;padding:20px 14px;border-right:1px solid var(--ln);background:#fffdf8}
 #app{margin-left:210px;padding:28px;max-width:960px}#bn{display:none}
@@ -28,6 +29,45 @@ canvas{width:100%;max-width:320px;height:320px;border:2px dashed var(--gold);bor
 @media(max-width:800px){#sb{display:none}#app{margin:0;padding:16px 14px 90px}.hero h1{font-size:26px}
 #bn{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fffdf8;border-top:1px solid var(--ln);justify-content:space-around;padding:6px 0 10px}
 #bn a{display:flex;flex:1;min-width:0;flex-direction:column;align-items:center;gap:3px;font-size:10px;text-align:center;text-decoration:none;color:var(--mut);padding:4px 2px;white-space:nowrap}#bn a .nav-mark{width:22px;height:22px;flex-basis:22px;font-size:13px}#bn a.on{color:var(--red);font-weight:700}}
+body{min-height:100vh;background-color:var(--bg);background-image:repeating-linear-gradient(0deg,transparent 0 35px,rgba(40,118,94,.025) 35px 36px),repeating-linear-gradient(90deg,transparent 0 35px,rgba(40,118,94,.025) 35px 36px);color:var(--ink);font-family:'DM Sans','Noto Sans SC',sans-serif;line-height:1.55}
+#sb{width:244px;padding:24px 16px;border-color:var(--ln);background:#fbfdfb}
+#app{min-height:100vh;margin-left:244px;padding:36px;max-width:1200px}
+.logo{font-family:'Noto Serif SC',serif;font-size:22px;letter-spacing:0;color:var(--ink)}
+.tag{font-size:12px;letter-spacing:0;color:var(--mut);margin:3px 0 24px}
+.nv{min-height:44px;padding:8px 10px;border-radius:6px;font-weight:600;transition:background .18s,color .18s}
+.nv:hover{background:var(--jade-soft)}.nv.on{background:var(--jade);color:#fff}
+.nav-mark{border-radius:2px;outline-color:var(--gold)}
+.card{border:1px solid var(--ln);border-radius:8px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;animation:in .28s ease-out}
+.grid{gap:16px}
+h1,h2{font-family:'Noto Serif SC',serif;letter-spacing:0;color:var(--ink)}
+h1{font-size:32px;line-height:1.25;border-left:4px solid var(--red);padding-left:13px;margin:0 0 18px}
+h2{font-size:21px;line-height:1.35;margin:24px 0 12px}
+.mut{color:var(--mut)}
+.btn{border-radius:6px;padding:10px 16px;background:var(--jade);font-family:'DM Sans',sans-serif;transition:transform .16s,background .16s,box-shadow .16s}
+.btn:hover{background:#1f634e;transform:translateY(-1px);box-shadow:0 4px 12px rgba(31,99,78,.16)}
+.btn.s{background:#fff;color:var(--ink);border:1px solid var(--ln)}.btn.s:hover{background:var(--jade-soft);box-shadow:none}
+.btn.g{background:var(--red)}.btn.g:hover{background:#a7352b}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.hero{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(118deg,#173d32,#286c55);border:0;border-radius:8px;padding:32px;color:#fff;box-shadow:0 14px 30px rgba(24,61,49,.16)}
+.hero::after{content:'汉';position:absolute;z-index:-1;right:28px;bottom:-70px;color:rgba(255,255,255,.075);font:600 250px/1 'Noto Serif SC',serif;pointer-events:none}
+.hero h1{max-width:660px;border:0;padding:0;color:#fff;font-size:36px}
+.hero .mut{max-width:650px;color:#d5e5db}
+.hero .hz{color:#e8c77f!important}
+.hero .btn.s{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4);color:#fff}
+.bar{height:9px;background:#e8eee9;border-radius:3px}.bar i{background:var(--jade);border-radius:3px}
+.tab{border-radius:5px;border-color:var(--ln);color:var(--ink);transition:background .16s,color .16s}
+.tab:hover{background:var(--jade-soft)}.tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+input,select{border-radius:6px;border-color:var(--ln);font-family:'DM Sans','Noto Sans SC',sans-serif;color:var(--ink);outline:none;transition:border .16s,box-shadow .16s}
+input:focus,select:focus{border-color:var(--jade);box-shadow:0 0 0 3px rgba(40,118,94,.12)}
+.row{gap:14px}.opt{border-radius:6px;border-color:var(--ln);color:var(--ink);transition:border .16s,background .16s}
+.opt:hover{border-color:var(--jade);background:var(--jade-soft)}
+.ok{background:#e2f3e7!important;border-color:#76b48a!important}.no{background:#fce9e5!important;border-color:#d98b7e!important}
+.flip{min-height:220px;background:linear-gradient(145deg,#fff,#f5faf6);border-color:#cbded2}
+canvas{border:1px dashed var(--gold);border-radius:8px;background:#fbfdfb}
+.stat{color:var(--red);font-family:'Noto Serif SC',serif}
+.pill{background:var(--jade-soft);color:#28644f;border-radius:4px;padding:3px 8px;font-weight:600}
+#bn{background:rgba(251,253,251,.96);border-color:var(--ln);box-shadow:0 -6px 24px rgba(29,56,44,.07);backdrop-filter:blur(12px)}
+@media(max-width:800px){#app{margin:0;padding:20px 14px 100px}.hero{padding:24px 20px}.hero h1{font-size:27px}.hero::after{right:-8px;bottom:-54px;font-size:190px}.card{padding:16px}.grid{gap:12px}h1{font-size:28px}h2{font-size:19px;margin-top:21px}}
 </style></head><body><aside id="sb"></aside><main id="app"></main><nav id="bn"></nav>
 <script>
 // ---------- DATA (mudah dipindah ke backend: Level > Lesson > Vocabulary) ----------
