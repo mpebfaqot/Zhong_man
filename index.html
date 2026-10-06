@@ -6,6 +6,7 @@
 #app{margin-left:210px;padding:28px;max-width:960px}#bn{display:none}
 .logo{font-weight:800;font-size:20px;margin-bottom:2px}.logo b{color:var(--red)}.tag{font-size:12px;color:var(--mut);margin-bottom:20px}
 .nv{display:block;padding:10px 12px;border-radius:10px;color:var(--ink);text-decoration:none;font-size:14px;margin-bottom:2px}.nv.on{background:var(--red);color:#fff}
+.nv{display:flex;align-items:center;gap:10px}.nav-mark{display:inline-grid;place-items:center;width:26px;height:26px;flex:0 0 26px;border:1px solid currentColor;outline:1px solid var(--gold);outline-offset:-4px;color:var(--red);font-family:serif;font-size:15px;font-weight:700;line-height:1}.nv.on .nav-mark{color:#fff;outline-color:#ffffff80}
 .card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 2px 10px #16213a12;margin-bottom:14px;animation:in .25s}
 @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
@@ -26,7 +27,7 @@ canvas{width:100%;max-width:320px;height:320px;border:2px dashed var(--gold);bor
 .pill{font-size:12px;background:#f3e6c3;border-radius:20px;padding:2px 9px}
 @media(max-width:800px){#sb{display:none}#app{margin:0;padding:16px 14px 90px}.hero h1{font-size:26px}
 #bn{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fffdf8;border-top:1px solid var(--ln);justify-content:space-around;padding:6px 0 10px}
-#bn a{font-size:11px;text-align:center;text-decoration:none;color:var(--mut);padding:4px 6px}#bn a.on{color:var(--red);font-weight:700}}
+#bn a{display:flex;flex:1;min-width:0;flex-direction:column;align-items:center;gap:3px;font-size:10px;text-align:center;text-decoration:none;color:var(--mut);padding:4px 2px;white-space:nowrap}#bn a .nav-mark{width:22px;height:22px;flex-basis:22px;font-size:13px}#bn a.on{color:var(--red);font-weight:700}}
 </style></head><body><aside id="sb"></aside><main id="app"></main><nav id="bn"></nav>
 <script>
 // ---------- DATA (mudah dipindah ke backend: Level > Lesson > Vocabulary) ----------
@@ -49,6 +50,7 @@ const LV=Object.keys(D),W=[];
 LV.forEach(l=>D[l].forEach((ls,li)=>ls.w.forEach(w=>{const o={id:W.length,h:w[0],p:w[1],m:w[2],lv:l,c:ls.t};W.push(o);w.id=o.id})));
 const STROKES={'你':'1. 丿 (撇) 2. 丨 (竖) 3. 丿 (撇) 4. 𠃌 (横折钩) 5. 丨 (竖) 6. 丿 (撇) 7. 丶 (点)','我':'1. 丿 2. 一 3. 亅 4. 𠄌 (提) 5. 乀 (斜钩) 6. 丿 7. 丶','好':'1. 𡿨 (撇点) 2. 丿 3. 一 4. 𠃋 (横撇) 5. 亅 (竖钩) 6. 一'};
 const NAV=[['home','Home','Beranda'],['learn','Learn','Belajar'],['practice','Practice','Latihan'],['vocab','Vocabulary','Kosakata'],['hsk','HSK','HSK'],['progress','Progress','Kemajuan'],['profile','Profile','Profil']];
+const navGlyph={home:'家',learn:'学',practice:'练',vocab:'词',hsk:'考',progress:'进',profile:'我'};
 // ---------- STATE ----------
 const td=()=>new Date().toISOString().slice(0,10),yd=()=>new Date(Date.now()-864e5).toISOString().slice(0,10);
 let S=JSON.parse(localStorage.hzp||'null')||{name:'Pelajar',goal:'Pass HSK 3',daily:15,weekly:5,xp:0,streak:0,last:'',done:{},fav:[],learned:{},tasks:{},act:{},mins:0,scores:[]};
@@ -64,7 +66,7 @@ const pct=l=>{const n=D[l].length;return n?Math.round(D[l].filter((_,i)=>S.done[
 const overall=()=>Math.round(lessons().filter(k=>S.done[k]).length/lessons().length*100);
 // ---------- UI STATE ----------
 let lv='HSK 1',pt='flash',fl={i:0,flip:0,deck:shuf(W),k:0},qz=null,vq='',vl='',vf=0,tm=null;
-const nav=p=>NAV.map(n=>`<a class="nv ${p==n[0]?'on':''}" href="#/${n[0]}">${n[1]} · ${n[2]}</a>`).join('');
+const nav=p=>NAV.map(n=>`<a class="nv ${p==n[0]?'on':''}" href="#/${n[0]}"><span class="nav-mark" aria-hidden="true">${navGlyph[n[0]]}</span><span>${n[1]} · ${n[2]}</span></a>`).join('');
 const bar=v=>`<div class="bar"><i style="width:${v}%"></i></div>`;
 const wc=w=>`<div class="card"><div class="row"><div><div class="hz">${w.h}</div><div style="color:var(--red)">${w.p}</div><div>${w.m}</div><div class="mut"><span class="pill">${w.lv}</span> ${w.c}</div></div>
 <div><button class="btn s" onclick="sp(${w.id})">🔊</button><button class="btn s" onclick="fav(${w.id})">${S.fav.includes(w.id)?'⭐':'☆'}</button></div></div></div>`;
@@ -132,7 +134,7 @@ function sub(){const f=document.getElementById('fb');if(window.ink<15){f.innerHT
 function render(keep){const r=location.hash.slice(2).split('/'),p=r[0]||'home',a=document.getElementById('app');
  document.getElementById('sb').innerHTML=`<div class="logo">Han<b>Zi</b>Path</div><div class="tag">Your Journey to Mandarin.</div>${nav(p)}<div class="mut" style="margin-top:20px">⚡ ${S.xp} XP · 🔥 ${S.streak}</div>`;
  const m=['home','learn','practice','vocab','profile'],ml={home:'Beranda',learn:'Belajar',practice:'Latihan',vocab:'Kosakata',profile:'Profil'};
- document.getElementById('bn').innerHTML=m.map(k=>`<a class="${p==k?'on':''}" href="#/${k}">${ml[k]}</a>`).join('');
+ document.getElementById('bn').innerHTML=m.map(k=>`<a class="${p==k?'on':''}" href="#/${k}"><span class="nav-mark" aria-hidden="true">${navGlyph[k]}</span><span>${ml[k]}</span></a>`).join('');
  a.innerHTML=(P[p]||P.home)(+r[1]);if(keep){const q=document.getElementById('q');if(q){q.focus();q.setSelectionRange(99,99)}}else if(!keep&&!arguments.length)scrollTo(0,0);
  if(p=='practice')initCv()}
 onhashchange=()=>render();render();
